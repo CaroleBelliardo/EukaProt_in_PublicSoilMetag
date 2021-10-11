@@ -1,0 +1,151 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+import os
+import sys
+from modules import gestError
+from modules import callTools
+import multiprocessing as mp
+import pandas as pd
+import pathlib # test file
+from Bio import SeqIO
+
+wd=os.path.dirname(os.path.realpath(__file__))
+
+## --- Parse kraken
+#? add lineage
+#--extract kraken with all taxo lineage files
+def progress(iteration, steps, max_value, no_limit=False):
+     if int(iteration) == max_value:
+         if no_limit == True:
+             sys.stdout.write('\r')
+             print ("[x] \t%d%%" % (100), end='\r')
+         else:
+             sys.stdout.write('\r')
+             print ("[x] \t%d%%" % (100))
+     elif int(iteration) % steps == 0:
+         sys.stdout.write('\r')
+         print ("[x] \t%d%%" % (float(int(iteration) / int(max_value)) *
+100), end='\r')
+         sys.stdout.flush()
+     else:
+         pass
+  
+def parrallelize(func,jobL):   
+    pool=mp.Pool(60)
+    for i, _ in enumerate(pool.imap_unordered(func,jobL),1):
+        progress(i,1,len(jobL))  
+ 
+def krakenParseInDico(taxon,dico_contigTaxon,dk):
+    Kraken_taxon=(dk[dk.lineage.str.contains(taxon, na=False)]) # select sous table avec taxon #sst.contig.to_csv(r'tmp/kraken_split/krakenContig_'+Taxon+'.txt',  sep='\t', mode='a', header = None,index =None    
+    Kraken_taxon=Kraken_taxon[~Kraken_taxon.contig.isin(dico_contigTaxon.keys())]
+    for contig in Kraken_taxon.contig.unique() :
+        contig=str(contig)
+        if contig in dico_contigTaxon:
+            if dico_contigTaxon[contig] == taxon :
+                with open('tempoFiles/duplicatedKraken.txt', 'a') as f:
+                    print('error :'+contig+' already in dico, duplicated in kraken but taxo == '+ taxon)
+            else:
+                with open('tempoFiles/duplicatedKraken.txt','a') as f:
+                    print('error :'+contig+' already in dico, duplicated in kraken and taxo !='+dico_contigTaxon[contig]+' vs '+taxon )
+        else: 
+            dico_contigTaxon[contig] =taxon # contigName : depper_taxon
+    return(dico_contigTaxon)
+
+## --- Parse fasta; extract seq
+#? parralelise + ADD NO MODEL EUKA seq
+#--needs dico from kraken-lineage
+def extractSeq(t_list):
+    fastaFile, dico_contigTaxon,fastaRepo,fastaOutRepo ,outputfna= t_list
+    fasta_sequences = SeqIO.parse(open(fastaRepo+'/'+fastaFile),'fasta') # open fasta
+    
+for seq in fasta_sequences:
+        if seq.id in dico_contigTaxon:    # if sequence is in list of contig of this taxon for this metag       
+            # for s in dico_contigTaxon[seq.id]:
+            p=outputfna.fnaPath.loc[outputfna.deeper_taxon == dico_contigTaxon[seq.id]]
+            pp=p.to_string(header=False, index=False).strip()+'/'+fastaFile+'.fna'
+            with open(pp, "a") as handle:#
+                SeqIO.write([seq], pp, "fasta") # print sequence in the file
+
+          
+def extractSeqRun(fastaRepo,dico_contigTaxon,fastaOutRepo,outPaths):         #metagL,ContigK_fasta,taxon,Kraken_taxon,contigs
+    fastaFiles=os.listdir(fastaRepo)
+    jobL = []
+    for fastaFile in fastaFiles:
+        t_list = [fastaFile,dico_contigTaxon,fastaRepo,fastaOutRepo,outPaths]
+        jobL.append(t_list)
+    parrallelize(extractSeq,jobL)
+
+
+def concatFile(repo): # cat repo ; rm tmp file
+    if len(os.listdir(repo) ) != 0:
+        str1 = "cat "+repo+"/* > "+repo+".fna; rm -r "+repo
+    else :
+        str1 = "rm -r "+repo
+    content = os.popen(str1).read()
+
+# Augustus output traitement
+#analyse gff
+def gfftobed(gff,bed):# conversion en fichier bed
+    str1 = " awk -F'\t' '$3~/^gene/' "+gff+" | awk -F'\t' '{print $1,$4,$5,$6,$7,$8,$9,$2,$3}' OFS='\t' > "+bed
+    content = os.popen(str1).read()
+
+def gfftofasta(gff,faa): # extraction seq prot
+    # print('gfftofasta gff :'+gff )
+    # print('gfftofasta faa :'+faa )
+    g=gff.split('.')[0]+'.aa'
+    str1 = "perl "+wd+"/getAnnoFasta.pl "+gff+" ; mv "+g+" "+faa
+    content = os.popen(str1).read()
+
+def gffParse2(lofl):   #fastaRepo,dico_contigTaxon,fastaOutRepo      #metagL,ContigK_fasta,taxon,Kraken_taxon,contigs
+    Gff,Bed, Aa=lofl
+    gestError.mkdir_exist('tempoFiles')
+    if pathlib.Path(Gff).exists():
+        if not os.stat(Gff).st_size == 0 :
+            tmp='file exist and not empty ok\n'
+            gfftobed(Gff,Bed)
+            gfftofasta(Gff,Aa)
+    else :
+        tmp='file doesnt exist\n'
+    with open('tempoFiles/gffParse.txt', 'a') as ff:
+                ff.write('\t- '+Gff+' '+tmp)
+
+
+# parse diamond
+def addLineage(f):
+    str1 = "sh ./modules/addL.sh"+f
+    content = os.popen(str1).read()
+
+def filtreSeq(fastaIn,ContigList,fastaOut):
+        fasta_sequences = SeqIO.parse(open(fastaIn),'fasta') # open fasta
+        for seq in fasta_sequences:
+            if seq.id in ContigList:    # if sequence is in list of contig of this taxon for this metag 
+                SeqIO.write([seq], fastaOut, "fasta") # print sequence in the file
+                
+def dmdParse(l) :
+    aa,dmdout,aaEuk,=l
+    addLineage(dmdout)
+    dmdout=dmdout+'.lineage'
+    b=pd.read_table(dmdout, sep='\t',names=['pName', 'taxid','evalue','lineage'])
+    b[['contigid','protid']] = b.pName.str.split(".",1,expand=True,) # split en 2 col
+    b['freqContig']=b.groupby(by='contigid')['contigid'].transform('count')
+    b['freqContige']=b.groupby(['contigid','e'])['contigid'].transform('count')
+    bb=b.loc[b['e'] == True]
+    l_eukContig=bb[bb.freqContige/bb.freqContig > 0.5].pName.to_list()
+    filtreSeq(aa,l_eukContig,aaEuk)
+    with open(aaEuk+'.list' , 'w') as f:
+        for item in l_eukContig:
+            f.write("%s\n" % item)
+            
+#extract Prodigal seq
+    def extProd(p):
+        print('ext prod')
+        pl=p+'.list'
+        print(pl)
+        f = open(pl, "r")
+        liste=f.readlines() # list euka contigs
+        for i in liste :
+            ii=i.rsplit('_',1)
+            contigId,metagId =ii            
+            ## ou 
+        # DT=pd.read_table(args.modelTable, sep='\t');
+         ##DK[['contig','metagId']] = DK.contig.str.rsplit("_",1,expand=True,)
