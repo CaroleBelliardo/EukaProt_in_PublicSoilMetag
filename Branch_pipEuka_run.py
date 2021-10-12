@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pprint  # debugg -- affichage Dump des structures de données
-import os  # manip systeme
+import os  
 import argparse
 import pathlib
 import pandas as pd
@@ -132,28 +132,6 @@ def step1(kraken_subt):
     t1_stop = process_time()
     print(f'step 3/3 mid:_{mid}_ krakenToDico :  run  ok\n     time :   {(t1_stop-t1_start)=}\n\n\n', file=open(log_f+'.tmp', 'a'))
 
-#
-# def appendDicoIndicoValue(dico, key, key2, v_str):
-#     if key in dico.keys():
-#         if key2 in dico[key]:
-#             dico[key][key2]=dico[key][key2]+[v_str]
-#             t=dico[key][key2]
-#         else:
-#             dico[key][key2] = [v_str]
-#     else:
-#         dico[key] = {key2: [v_str]}
-#     return dico
-#
-# def format_kraken_dico_Fromlist(kraken_model_list):
-#     km_dico_formated = dict()
-#     for model, contig_list in kraken_model_list:
-#         if len(contig_list) > 0 :
-#             for c in contig_list :
-#                 m=c.rsplit('_',1)[1]
-#                 contig=c.rsplit('_',1)[0]
-#                 km_dico_formated = appendDicoIndicoValue(km_dico_formated, m, model, contig)
-#     return km_dico_formated  # ex:    km_dico={'fileB':{'rhizopus_oryzae': {'Ga0272421_100ustr', 'Ga0272421_100usta', 'Ga0272421_1000028', 'Ga0272421_100ustc', 'Ga0272421_1000035', 'Ga0272421_1000029'}}}
-#
 
 
 # # Main
@@ -203,7 +181,7 @@ if __name__ == "__main__":
         #  krakenModels_dico = krakenToDico(Models_df, kraken_lineage_df)
         print(f'\n\n\nmain :KRAKEN TO DICO strating ... ', file=open(log_f, 'a'))
 
-        # step 1:  taxid given by kraken == taxid model species; exact search
+        # step 1:  taxid given by kraken == taxid model species; exact matching
         t1_start = process_time()
         deeperTx_list = set(Models_df.taxid_new_deeperTaxon)
         parrallelize(step1, subtable)
@@ -222,14 +200,14 @@ if __name__ == "__main__":
 
 
 #    for r in repo.values(): gestError.mkdir_exist(r)
+
 #    print(f'step 3/9 : ok  output Repository created {repo["fnaPath"]} \n\n', file=open(log_f, 'a'))
-    # mkdir SUB dossier
     for k, r in repo.items(): Models_df[k] = [r + i for i in Models_df.index]
 #    Models_df.fnaPath.apply(gestError.mkdir_exist)
 #    print(f'step 4/9 : ok kraken_fna sub Repo {len(repo["fnaPath"])} \n\nrunning extract seq....', file=open(log_f, 'a'))
     #-- extract seq euka
-    # list les metag set fichier dans repo model => pool donne metag, Model,
-    # appel fonction pour chaque model print fasta si fichier metag exist
+    # list metag set fichier in repo model => pool donne metag, Model,
+    # call function for each model print fasta if metag file exists
 
 
 #    parse.extractSeqRun(args.fna,  Models_df[['fnaPath','model_mid_contigs']])#
