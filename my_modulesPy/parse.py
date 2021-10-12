@@ -121,14 +121,6 @@ def gfftobed(l):  # conversion en fichier bed
     str1 = f'awk -F\'\\t\' \'$3~/^gene/\' {GffIN} | awk -F\'\\t\' ' + "'{print $1,$4,$5,$6,$7,$8,$9,$2,$3}'" + f' OFS=\'\\t\' > {BedOUT}'
     content = os.popen(str1).read()
 
-    # from bioinfo_tools.parsers.gff import Gff3
-    # gff_parser = Gff3()
-    # with open(GffIN, "r") as fh:
-    #     for gene in gff_parser.read(fh):
-    #         print(gene.keys())
-    #         # print(gene[gene[type]])
-    #         print('\n\n')
-
 
 def gfftofasta(l):  # extraction seq prot
     gffP, aaP = l
@@ -163,20 +155,6 @@ def gffParse(Gff_Bed_Aa_df,log_f):  # fastaRepo,dico_contigTaxon,fastaOutRepo   
     parrallelize(gfftofasta, jobL_Fasta)
 
 
-
-# parse diamond
-# def addLineage_py(lineage_df,blast): #lineage_f
-#     blast = pd.read_table(blast, sep='\t', names=['pName', 'taxid', 'evalue'])
-#     blast_lineage = pd.merge(blast, lineage_df, how='left', on='taxid')
-#     blast_lineage.to_csv(file+'.lineage', index=False, sep='\t')
-#
-# def addLineage_pyRun(listeF,taxo):
-#     lineage_df = pd.read_table(taxo, sep='\t', names=['taxid', 'lineage', 'nodes'])
-#     jobs=[]
-#     for b in listeF:
-#         jobs.append([lineage_df,listeF])
-#     parrallelize(addLineage_py(lineage_df,listeF))
-
 def addLineage(f):
     str1 = "sh ./modules/addL.sh" + f
     content = os.popen(str1).read()
@@ -189,7 +167,6 @@ def filtreSeq(fastaIn, ContigList, fastaOut):
         if seq.id in ContigList:  # if sequence is in list of contig of this taxon for this metag
             SeqIO.write([seq], fastaOut, "fasta")  # print sequence in the file
 
-### TODO !!
 def dmdParse(l):
     aa, dmdout, aaEuk = l
     addLineage(dmdout)
