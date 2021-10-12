@@ -4,7 +4,7 @@ import os
 import sys
 import multiprocessing as mp
 import pandas as pd
-import pathlib  # test file
+import pathlib  # test path
 from Bio import SeqIO
 from time import process_time
 import pyfasta
@@ -114,7 +114,7 @@ def checkFile_split(fichier):
 
 # Augustus output traitement
 # analyse gff
-def gfftobed(l):  # conversion en fichier bed
+def gfftobed(l):  # conversion intor bed file
     gffP, BedP = l  # ex . : ['test/GFF_krakenEuka-contigs/', 'test/BED_krakenEuka-contigs/', 'test/AA_krakenEuka-contigs/', 'Mammalia.gff']
     GffIN = f'{gffP}.gff'
     BedOUT = f'{BedP}.bed'
