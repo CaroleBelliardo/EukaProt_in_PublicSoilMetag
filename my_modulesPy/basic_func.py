@@ -2,13 +2,8 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-#from modules import gestError
-#from modules import callTools
 import multiprocessing as mp
-#import pandas as pd
-#import pathlib # test file
 from Bio import SeqIO
-#import operator
 import pyfastx
 
 def parrallelize(func,jobL):   
