@@ -1,6 +1,8 @@
 # EukaProt_in_PublicSoilMetag
 
-Bioinformatic python3 scripts to predict eukaryotic proteins in Metagenome-Assembled Genomes data. 
+Bioinformatic python3 scripts to predict eukaryotic proteins in Metagenome-Assembled Genomes (MAGs) data. 
+
+
 Dependances: 
   Python3 package : 
  numpy, 
