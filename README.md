@@ -3,13 +3,13 @@
 Bioinformatic python3 scripts to predict eukaryotic proteins in Metagenome-Assembled Genomes data. 
 Dependances: 
   Python3 package : 
-    - numpy, 
-    - pandas,
-    - biopython
-    - pyfasta
-    - time 
-    - argparse
-    - pprint
+ numpy, 
+   - pandas,
+   - biopython
+   - pyfasta
+   - time 
+   - argparse
+   - pprint
     
 
   This pipeline use several tool : 
