@@ -4,8 +4,9 @@ Bioinformatic python3 scripts to predict eukaryotic proteins in Metagenome-Assem
 
 
 Dependances: 
-  Python3 package : 
- numpy, 
+
+  Python3 packages : 
+   - numpy, 
    - pandas,
    - biopython
    - pyfasta
@@ -14,7 +15,7 @@ Dependances:
    - pprint
     
 
-  This pipeline use several tool : 
+  This pipeline use also several already publised bioinformatic tool : 
    - KRAKEN2 : contig taxonomic classification, 
    - AUGUSTUS : protein prediction, 
    - DIAMOND : protein taxonomic annotation,
