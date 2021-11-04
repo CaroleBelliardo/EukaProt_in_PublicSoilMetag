@@ -15,7 +15,7 @@ Dependances:
     
 
   This pipeline use several tool : 
-   - KRAKEN2 (contig taxonomic classification), 
-   - AUGUSTUS (protein prediction), 
-   - DIAMOND (protein taxonomic annotation),
-   - BUSCO (Protein prediction quality). 
+   - KRAKEN2 : contig taxonomic classification, 
+   - AUGUSTUS : protein prediction, 
+   - DIAMOND : protein taxonomic annotation,
+   - BUSCO : protein prediction quality. 
