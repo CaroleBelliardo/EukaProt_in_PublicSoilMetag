@@ -20,3 +20,8 @@ Dependances:
    - AUGUSTUS : protein prediction, 
    - DIAMOND : protein taxonomic annotation,
    - BUSCO : protein prediction quality. 
+
+
+
+[![DOI](https://zenodo.org/badge/385688623.svg)](https://zenodo.org/badge/latestdoi/385688623)
+
