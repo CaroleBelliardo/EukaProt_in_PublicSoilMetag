@@ -1,0 +1,86 @@
+taxid,species,model,deeper_taxon
+7029,Acyrthosiphon pisum,pea_aphid,Hemiptera
+7159,Aedes aegypti,aedes,Culicidae
+400682,Amphimedon queenslandica,amphimedon,Porifera
+1758,Apis mellifera,honeybee1,Apis
+53326,Ancylostoma ceylanicum,ancylostoma_ceylanicum,Strongylida
+3702,Arabidopsis thaliana,arabidopsis,Brassicales
+746128,Aspergillus fumigatus,aspergillus_fumigatus,aspergillus_fumigatus
+162425,Aspergillus nidulans,aspergillus_nidulans,aspergillus_nidulans
+5062,Aspergillus oryzae,aspergillus_oryzae,aspergillus_oryzae
+33178,Aspergillus terreus,aspergillus_terreus,aspergillus_terreus
+132113,Bombus impatiens,bombus_impatiens1,Bombus impatiens
+30195,Bombus terrestris,bombus_terrestris2,Bombus terrestris
+40559,Botrytis cinerea,botrytis_cinerea,Leotiomycetes
+6279,Brugia malayi,brugia,Onchocercidae
+6239,Caenorhabditis elegans,caenorhabditis,Rhabditidae
+5476,Candida albicans,candida_albicans,Candida albicans
+4929,Candida guilliermondii,candida_guilliermondii,Candida albicans
+5482,Candida tropicalis,candida_tropicalis,Candida tropicalis
+38033,Chaetomium globosum,chaetomium_globosum,Chaetomiaceae
+3055,Chlamydomonas reinhardtii,(chlamydomonas),Chaetomiaceae
+5501,Coccidioides immitis,coccidioides_immitis,Onygenales
+5346,Coprinus cinereus,coprinus,Agaricomycotina
+5206,Cryptococcus neoformans,cryptococcus,Tremellomycetes
+4959,Debaryomyces hansenii,debaryomyces_hansenii,Debaryomyces
+7227,Drosophila melanogaster,fly,Drosophilidae
+6035,Encephalitozoon cuniculi,encephalitozoon_cuniculi_GB,Microsporidia
+33169,Eremothecium gossypii,eremothecium_gossypii,Eremothecium
+5518,Fusarium graminearum,(fusarium),Hypocreales
+130081,Galdieria sulphuraria,galdieria,Rhodophyta
+5037,Histoplasma capsulatum,(histoplasma),Ajellomycetaceae
+9606,Homo sapiens,human,Mammalia
+28985,Kluyveromyces lactis,kluyveromyces_lactis,Kluyveromyces
+29883,Laccaria bicolor,laccaria_bicolor,Agaricales
+5689,Leishmania tarentolae,leishmania_tarentolae,Euglenozoa
+980415,Lethenteron camtschaticum,japaneselamprey,Lethenteron
+36914,Lodderomyces elongisporus,lodderomyces_elongisporus,Lodderomyces
+148303,Magnaporthe grisea,magnaporthe_grisea,Magnaporthe
+27923,Mnemiopsis leidyi,mnemiopsis_leidyi,Ctenophora
+45351,Nematostella vectensis,nematostella_vectensis,Cnidaria
+7425,Nasonia vitripennis,nasonia,Pteromalidae
+5141,Neurospora crassa,neurospora,Sordariaceae
+7757,Petromyzon marinus,sealamprey,Petromyzon
+5306,Phanerochaete chrysosporium,pchrysosporium,Polyporales
+4919,Pichia stipitis,pichia_stipitis,Pichiaceae
+64495,Rhizopus oryzae,rhizopus_oryzae,Mucoromycota
+4932,Saccharomyces cerevisiae,Saccharomyces,Saccharomyces
+6183,Schistosoma mansoni,schistosoma,Platyhelminthes
+4896,Schizosaccharomyces pombe,schizosaccharomyces_pombe,Schizosaccharomycetes
+4081,Solanum lycopersicum,tomato,Solanales
+5911,Tetrahymena thermophila,tetrahymena,tetrahymena
+5811,Toxoplasma gondii,toxoplasma,toxoplasma
+7070,Tribolium castaneum,tribolium2012,Coleoptera
+6334,Trichinella spiralis,wheat,Enoplea
+5270,ustilago_maydis,ustilago,Ustilaginomycetes  
+80849,Wolbachia endosymbiont of Brugia malayi,x,x
+4952,Yarrowia lipolytica,yarrowia_lipolytica,Dipodascaceae
+4577,Zea mays,maize,Zea
+28450,Burkholderia pseudomallei,b_pseudomallei,bacterie
+7868,Callorhinchus milii,elephant_shark,Chimaeriformes
+104421,Camponotus floridanus,camponotus_floridanus,Formicidae
+137246,Chiloscyllium punctatum,chiloscyllium,Hemiscylliidae
+3055,Chlamydomonas reinhardtii,(chlamydomonas),Chlamydomonadaceae
+3079,Chlorella sp.,chlorella,Trebouxiophyceae
+7719,Ciona intestinalis,ciona,Ascidiacea
+34488,Conidiobolus coronatus,Conidiobolus_coronatus,Zoopagomycota
+1758,Culex pipiens,culex,Nematocera;
+7955,Danio rerio,zebrafish,Cypriniformes
+3641,Theobroma cacao,cacao,Malvales
+2287,Sulfolobus solfataricus,sulfolobus_solfataricus,Archaea
+7668,Strongylocentrotus purpuratus,strongylocentrotus_purpuratus,Echinoidea
+1313,Streptococcus pneumoniae,s_pneumoniae,Lactobacillales
+1280,Staphylococcus aureus,s_aureus,Bacillales
+75743,Scyliorhinus torazame,scyliorhinus,Carcharhiniformes
+7612,Pisaster ochraceus,pisaster,Asteroidea
+13249,Rhodnius prolixus,rhodnius,Reduviidae
+259920,Rhincodon typus,rhincodon,Rhincodontidae
+42068,Pneumocystis jirovecii,pneumocystis,Pneumocystidomycetes
+5833,Plasmodium falciparum,pfalciparum,Aconoidasida
+3641,Theobroma cacao,cacao,Malvales
+119072,Thermoanaerobacter tengcongensis,thermoanaerobacter_tengcongensis,Clostridia
+4569,Triticum sp.,wheat,Triticum sp.
+5270,Ustilago maydis,(ustilago),Ustilaginomycetes
+55411,Volvox sp.,volvox,Volvocaceae
+8083,Xipophorus maculatus,Xipophorus_maculatus,Teleostomi
+4577,Zea mays,maize,Zea

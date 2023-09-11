@@ -1,0 +1,150 @@
+---
+title: "Augustus versus Prodigal"
+author: "cbelliardo"
+date: "3/30/2020"
+output: html_document
+fig_width: 12
+fig_height: 14 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F,warning=FALSE, message=FALSE)
+```
+# I/ Protein lengths
+\
+
+```{r}
+library(ggplot2)
+library(reshape2)
+#install.packages('gridExtra')
+library(gridExtra)
+a=read.table('LEN/cut_augustus.txt')
+p=read.table('LEN/cut_prodigal.txt')
+
+Augustus=cbind(a,rep('Augustus',length(a$V1)))
+names(Augustus)<-c('aa_number','tools')
+
+Prodigal=cbind(p,rep('Prodigal',length(p$V1)))
+names(Prodigal)<-c('aa_number','tools')
+ap=rbind(Augustus,Prodigal)
+
+p1=ggplot(ap,aes(x=aa_number, fill=tools)) + geom_density(alpha=0.25)+ theme_classic() 
+p2=ggplot(ap,aes(x=tools, y=aa_number,fill=tools)) + geom_boxplot()+ theme_classic()+ guides(fill=FALSE)+theme(axis.title.x=element_blank())
+
+grid.arrange( p1,p2,
+              nrow =2)
+```
+
+### Focus proteins < 750 AA
+
+```{r}
+p1=ggplot(ap,aes(x=aa_number, fill=tools)) + geom_density(alpha=0.25)+ theme_classic() +  xlim(0, 750)
+p2=ggplot(ap,aes(x=tools, y=aa_number,fill=tools)) + geom_boxplot()+ theme_classic()+ guides(fill=FALSE)+theme(axis.title.x=element_blank())+
+ylim(0, 750)
+
+grid.arrange( p1,p2,
+              nrow =2)
+```
+
+#### Test protein lengths predicted by augustus versus protein lengths predicted by prodigal
+
+```{r}
+bartlett.test(list(a$V1,p$V1)) # homocedacié
+wilcox.test(a$V1,p$V1)
+t.test(a$V1,p$V1)
+#p-value = 2.10-16
+```
+
+
+
+# II/ Proteins number by metagenomes
+
+```{r}
+a=read.table('NB_GENE/nb_gene_augustus.txt')
+names(a)<-c('Contigs','nb_gene','tools')
+
+p=read.table('NB_GENE/nb_gene_prodigal.txt')
+names(p)<-c('Contigs','nb_gene','tools')
+
+paste=read.table('NB_GENE/paste')
+names(paste)<-c('Contigs','nb_prodigal','tools','Contigs2','Augustus','tools2')
+
+Augustus=a[which(a$nb > 0 & a$nb <50 ),]
+Prodigal=p[which(p$nb > 0  &p$nb <50),]
+ap=rbind(Augustus,Prodigal)
+
+p1=ggplot(ap,aes(x=nb_gene, fill=tools)) + geom_density(alpha=0.25)+ theme_classic()
+p2=ggplot(ap,aes(x=tools, y=nb_gene,fill=tools)) + geom_boxplot()+ theme_classic()+ guides(fill=FALSE)+theme(axis.title.x=element_blank())
+grid.arrange( p1,p2,
+              nrow =2)
+```
+
+## Test proteins number predicted by augustus versus proteins number predicted by prodigal
+```{r}
+bartlett.test(list(ap$nb_gene[ap$tools=='augustus'],ap$nb_gene[ap$tools=='Prodigal'])) # homocedacié
+wilcox.test(ap$nb[which(ap$tools=='augustus')],ap$nb[which(ap$tools=='Prodigal')],paired=F,var.equal=T)
+t.test(ap$nb[which(ap$tools=='augustus')],ap$nb[which(ap$tools=='Prodigal')],paired=F,var.equal=T)
+
+#p-value = 0.03468
+```
+
+
+
+
+# III/ Busco on Augustus output vs Busco on Prodigal output
+## a) Busco stat by metagenomes
+```{r}
+euk=read.table('BUSCO/aug_euk.txt',header = T)
+euka=cbind(euk,rep('Augustus',length(euk$Contigs_euk)))
+names(euka)<-c('Contigs','Complete','Complete_single-copy','Complete_duplicated', 'Fragmented', 'Missing', 'Total','Tools')
+
+pro=read.table('BUSCO/Prod_euk.txt_no_empty')
+prod=cbind(pro,rep('Prodigal',length(pro$V1)))
+names(prod)<-c('Contigs','Complete','Complete_single-copy','Complete_duplicated', 'Fragmented', 'Missing', 'Total','Tools')
+
+ea=rbind(euka,prod)
+
+p1=ggplot(ea,aes(x=Complete, fill=Tools)) + geom_density(alpha=0.25)+ theme_classic()+ guides(fill=FALSE)
+p2=ggplot(ea,aes(x=Fragmented, fill=Tools)) + geom_density(alpha=0.25)+ theme_classic()+ guides(fill=FALSE)+theme(axis.title.x=element_blank())
+p3=ggplot(ea,aes(x=Missing, fill=Tools)) + geom_density(alpha=0.25)+ theme_classic()+ guides(fill=FALSE)
+
+p4=ggplot(ea,aes(x=Tools, y=Complete, fill=Tools)) + geom_boxplot()+ theme_classic()
+p5=ggplot(ea,aes(x=Tools, y=Fragmented, fill=Tools)) + geom_boxplot()+ theme_classic()+ guides(fill=FALSE)+theme(axis.title.x=element_blank())
+p6=ggplot(ea,aes(x=Tools, y=Missing, fill=Tools)) + geom_boxplot()+ theme_classic()+ guides(fill=FALSE)+theme(axis.title.x=element_blank())
+
+
+
+grid.arrange(p1, p4,
+             p2, p5,
+             p3, p6,
+             nrow = 3)
+```
+
+```{r}
+t.test(euk$Complete_euk,pro$V2)
+```
+
+
+## b) Busco stat --  Pooled etagenomes
+
+#### Eukaryota near-universal single-copy orthologs
+
+```{r}
+pool=read.table('Pooled_AvsP.txt',header = T,sep=',')
+
+e=pool[pool$Lineage=='Eukaryota',]
+a=pool[pool$Lineage=='Alveolata',]
+
+ggplot(e, aes(x=Variable, y=Percent, fill=Tools)) + 
+  geom_bar(stat="identity", position=position_dodge())+ theme( axis.title.x=element_blank())+ theme(axis.title.x=element_blank(), panel.background = element_rect(fill = "white"))
+```
+
+#### Alveolata near-universal single-copy orthologs
+
+```{r}
+
+ggplot(a, aes(x=Variable, y=Percent, fill=Tools)) + 
+  geom_bar(stat="identity", position=position_dodge())+ theme(axis.title.x=element_blank(), panel.background = element_rect(fill = "white"))
+
+
+```
