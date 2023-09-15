@@ -1,0 +1,3 @@
+# Ignorer les fichiers .err et .out
+*.err
+*.out
